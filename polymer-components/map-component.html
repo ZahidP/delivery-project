@@ -1,0 +1,49 @@
+<polymer-element name="map-component" attributes="deliveries drivers speed">
+  <template>
+  	<link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto:400,300,700,400italic,300italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.8/mapbox.css' rel='stylesheet' />
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet' />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Roboto:400,300,700,400italic,300italic' rel='stylesheet' type='text/css'>
+
+
+  	<style>
+
+    </style>
+
+    <div id="map-col" class="col-md-7">
+			<div id="mapcontainer">
+				<div id="map">
+				MapTime
+				</div>
+			</div>
+
+		</div>
+
+
+  </template>
+
+
+  <script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.8/mapbox.js'></script>
+  	<script>
+    //var http = require('http').Server(app);
+    //var io = require('socket.io')(http);
+    var socket = io();
+
+    Polymer('parameter-component',{
+      ready: function() {
+      	this.deliveries = 20;
+      	this.drivers = 2;
+      	this.speed = 20;
+      },
+      moreDeliveries: function () {
+      	this.deliveries = this.deliveries + 1;
+      	console.log('more deliveries');
+      }
+    }
+
+    </script>
+</polymer-element>

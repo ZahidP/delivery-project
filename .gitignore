@@ -2,3 +2,4 @@
 /node_modules
 /js/leaflet
 /js/socket.io
+/js/leaflet-realtime/
