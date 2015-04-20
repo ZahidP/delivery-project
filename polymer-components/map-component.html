@@ -22,6 +22,38 @@
 		</div>
 
 
+    <script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoiemFoaWQiLCJhIjoiYkE0WWYtYyJ9.Iumsoihb-jms7CXygDKKMg';
+
+    var map = L.map('map', {
+      center: [41.895, -87.62501120567322],
+      zoom: 13,
+      zoomControl: true,
+      scrollWheelZoom: false
+    });
+        //.addLayer(mapboxTiles)
+
+    // Replace 'examples.map-i87786ca' with your map id.
+    var mapboxTiles = L.tileLayer('https://{s}.tiles.mapbox.com/v4/zahid.loa698h2/{z}/{x}/{y}.png?access_token=' + L.mapbox.accessToken, {
+        attribution: '<a href="http://www.mapbox.com/about/maps/" target="_blank">Terms &amp; Feedback</a>'
+    }).addTo(map);
+
+
+
+    var drivers = [
+                    [41.899, -87.621],
+                    [41.885, -87.628]
+                  ];
+
+
+    for (var i = 0; i < drivers.length; i++) {
+      var marker = new L.marker(drivers[i])
+        .bindPopup(drivers[i][0])
+        .addTo(map);
+    }
+
+    </script>
+
   </template>
 
 
@@ -38,11 +70,18 @@
       	this.deliveries = 20;
       	this.drivers = 2;
       	this.speed = 20;
+        this.map = {};
       },
       moreDeliveries: function () {
       	this.deliveries = this.deliveries + 1;
       	console.log('more deliveries');
-      }
+      },		L.mapbox.accessToken = 'pk.eyJ1IjoiemFoaWQiLCJhIjoiYkE0WWYtYyJ9.Iumsoihb-jms7CXygDKKMg';
+      		// var map = L.map('map').setView([41.905, -87.652], 12);
+      mapChanged: function () {
+
+
+          this.map = map;
+        }
     }
 
     </script>

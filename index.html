@@ -168,40 +168,43 @@ body {
 		}).addTo(map);
 
 
+		function updateDrivers(drivers) {
+				var drivers = [
+												[41.899, -87.621],
+												[41.885, -87.628]
+											];
 
-		var drivers = [
-										[41.899, -87.621],
-										[41.885, -87.628]
-									];
+				var driversGroup = new L.LayerGroup().addTo(map);
+				//var marker = L.marker([userLatitude, userLongitude]).addTo(markers);
 
-
-		for (var i = 0; i < drivers.length; i++) {
-			var marker = new L.marker(drivers[i])
-				.bindPopup(drivers[i][0])
-				.addTo(map);
+				for (var i = 0; i < drivers.length; i++) {
+					var marker = new L.marker(drivers[i]).addTo(driversGroup);
+				}
 		}
 
-		//var driversLayer = L.geoJson().addTo(map);
-	//	driversLayer.addData(driversFeature);
+		function updateDeliveries(deliveries) {
+
+				if (deliveriesGroup) {
+					map.removeLayer(deliveriesGroup);
+				}
+				var deliveriesGroup = new L.LayerGroup().addTo(map);
+					//var marker = L.marker([userLatitude, userLongitude]).addTo(markers);
+					for (var i = 0; i < deliveries.length; i++) {
+						var marker = new L.circle(deliveries[i],50,{fillColor: 'red',color:"red"}).addTo(deliveriesGroup);
+							//.bindPopup(drivers[i][0])
+							//.addTo(map);
+					}
+			}
 
 
 
+		socket.on('stops', function(msg){
+				console.log(msg);
+				updateDeliveries(msg);
+		});
 
-	//			var featureLayer = L.mapbox.featureLayer()
-				    // Once this layer loads, we set a timer to load it again in a few seconds.
-	//			    .on('ready', run)
-	//			    .addTo(map);
-/*
-function run() {
-    featureLayer.eachLayer(function(l) {
-        map.panTo(l.getLatLng());
-    });
-    window.setTimeout(function() {
-        featureLayer.loadURL('https://wanderdrone.appspot.com/');
-    }, 2000);
-}
 
-*/
+
 </script>
 
 

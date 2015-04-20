@@ -143,7 +143,11 @@
       },
       reset: function () {
         // reset the simulation
-        socket.emit('restart', 'restart');
+        var allData = {};
+        allData.drivers = this.drivers;
+        allData.deliveries = this.deliveries;
+        allData.speed = this.speed;
+        socket.emit('init map', allData);
       },
       deliveriesChanged: function () {
         var deliveries = this.deliveries
