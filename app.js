@@ -24,6 +24,7 @@ io.on('connection', function(socket){
       // "GLOBALS"
       var d1Queue = [],
           d2Queue = [],
+          driverQueues = [],
           d1CurrentRoute = [],
           d2CurrentRoute = [],
           stopsArray = [];
@@ -63,13 +64,31 @@ io.on('connection', function(socket){
                 var newStop = [stop.lat,stop.lng];
                 stopsArray.push(newStop);
                 io.emit('stops', stopsArray);
-                DA.assignDrivers(driversLocation,stopsArray,d1Queue,d2Queue,RSG);
+                driverQueues = DA.assignDrivers(driversLocation,stopsArray,d1Queue,d2Queue,RSG);
+                d1Queue = driverQueues[0];
+                d2Queue = driverQueues[1];
             });
+
+              console.log('queueue');
+              console.log(d1Queue);
+              console.log(d2Queue);
+            setInterval(function () {
+              driverInfo = DA.moveDrivers(driversLocation,d1Queue,d2Queue,RSG);
+              d1Queue = driverInfo[0];
+              d2Queue = driverInfo[1];
+              driversLocation = driverInfo[2];
+              io.emit('driver update', driversLocation);
+
+
+            }, 2000);
+
+
+
+          });
 
 
         });
 
-});
 
 
 /*

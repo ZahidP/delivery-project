@@ -1,7 +1,8 @@
 //var RSG = require('./js/RandomStopGenerator.js');
+EventEmitter = require('events').EventEmitter;
+
 
 /*
-EventEmitter = require('events').EventEmitter;
 d1Queue.prototype.__proto__ = EventEmitter.prototype;
 d2Queue.prototype.addStop = function(stop, stopCount, seconds) {
 
@@ -52,12 +53,11 @@ module.exports = {
       else {
         d1Queue.push(recent);
       }
-      console.log('d1Queue');
-      console.log(d1Queue);
-      console.log('d2Queue');
-      console.log(d2Queue);
+      //console.log('d1Queue');
+      //console.log(d1Queue);
+      //console.log('d2Queue');
+      //console.log(d2Queue);
     }
-    //io.emit('driver update', driversLocation);
 
 
     var driversInfo = [d1Queue,d2Queue];
@@ -68,7 +68,7 @@ module.exports = {
 
   // @param: msg  --> drivers' current location
   // @param: d1Queue,d2Queue --> queue of driver deliveries
-  moveDrivers: function (msg,d1Queue,d2Queue) {
+  moveDrivers: function (msg,d1Queue,d2Queue,RSG) {
 
     var nextPositions = [];
     var d1Loc = {"lat":msg[0][0], "lng":msg[0][1]};
@@ -76,19 +76,64 @@ module.exports = {
 
     // look at first element at each queue
     // this should be prioritized delivery
-    if (d1Queue[0]) {
+    if (d1Queue.length) {
       var d1Delivery = d1Queue[0];
+      var d1DeliveryObj = {"lat":d1Delivery[0], "lng":d1Delivery[1]};
 
+      nextStepLat = (d1Loc.lat-d1DeliveryObj.lat)/10;
+      nextStepLng = (d1Loc.lng-d1DeliveryObj.lng)/10;
+
+      d1Loc.lat = d1Loc.lat + nextStepLat;
+      d1Loc.lng = d1Loc.lng + nextStepLng;
+
+      var d1Distance = RSG.distance(d1Loc,recentObj);
+
+      var d1L = [d1Loc.lat,d2Loc.lng];
+
+
+      if (d1Distance < .001) {
+        d1Queue.shift();
+      }
 
 
     }
-    if (d2Queue[0]) {
+    if (d2Queue.length) {
       var d2Delivery = d2Queue[0];
+      var d2DeliveryObj = {"lat":d2Delivery[0], "lng":d2Delivery[1]};
+
+      nextStepLat = d2Loc.lat-d2DeliveryObj.lat;
+      nextStepLng = d2Loc.lng-d2DeliveryObj.lng
+
+      d2Loc.lat = d2Loc.lat + nextStepLat;
+      d2Loc.lng = d2Loc.lng + nextStepLng
+
+      var d2Distance = RSG.distance(d1Loc,recentObj);
+
+      if (d2Distance < .001) {
+        d2Queue.shift();
+      }
+
+      var d2L = [d2Loc.lat,d2Loc.lng];
 
 
     }
 
-    io.emit('driver update', driversLocation);
+
+    console.log('new d1 location');
+    console.log(d1L);
+
+    console.log('new d2 location');
+    console.log(d2L);
+
+    if (d1L && d2L) {
+    var driversLocation = [d1L,d2L];
+    }
+    else {
+      var driversLocation = msg;
+    }
+    console.log(d1Queue);
+    var driversInfo = [d1Queue,d2Queue,driversLocation];
+    return driversInfo;
 
 
 
