@@ -35,13 +35,20 @@ __assignDrivers__
 // Assigns drivers to new deliveries
 DA.assignDrivers(driversLocation,stopsArray,d1Queue,d2Queue,RSG);
 ```
+  - **driverLocation:** Input the current location of both drivers
+  - **stopsArray:** The array of randomly generated stops. 
+  - **d1Queue:** The current queue of stops for driver 1.
+  - **d2Queue:** The current queue of stops for driver 2.
+  - **RSG:** Random stop generator.
 
 __moveDrivers__
 ```
 // Moves drivers to complete deliveries
 DA.moveDrivers: function (msg,d1Queue,d2Queue) {
 ```
-
+  - **msg:** Driver locations.
+  - **d1Queue:** The current queue of stops for driver 1.
+  - **d2Queue:** The current queue of stops for driver 2.
 
 
 
