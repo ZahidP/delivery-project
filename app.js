@@ -3,6 +3,7 @@ var app = express();
 var http = require('http');
 var server = http.createServer(app);
 var RSG = require('./js/RandomStopGenerator.js');
+var DA = require('./js/DriverAssignment.js');
 var io = require('socket.io').listen(server);
 
 
@@ -19,32 +20,39 @@ app.get('/', function(req, res){
 
 
 io.on('connection', function(socket){
-      socket.on('deliveries message', function(msg){
-        console.log('deliveries: ' + msg);
-      });
-      socket.on('drivers message', function(msg){
-        io.emit('chat message', msg);
 
-        console.log('drivers: ' + msg);
-      });
-      socket.on('speed message', function(msg){
-        io.emit('chat message', msg);
-        console.log('speed: ' + msg);
-      });
+      // "GLOBALS"
+      var d1Queue = [],
+          d2Queue = [],
+          d1CurrentRoute = [],
+          d2CurrentRoute = [],
+          stopsArray = [];
+
+
+      var driversLocation = [
+                      [41.899, -87.621],
+                      [41.885, -87.628]
+      ];
+
+
+
       socket.on('init map', function(msg) {
             //return require('./api/map').initMap(msg)
 
             console.log(msg);
-            var stopsArray = [];
 
-            var simulator = RSG.init();
+
+
+            io.emit('driver update', driversLocation);
+            console.log('speed: ' + msg.speed);
+            //var simulator = RSG.init();
             // or init with options
-            simulator = RSG.init({
-                playbackSpeed:20,
+            var simulator = RSG.init({
+                playbackSpeed:msg.speed,
                 // defaults to 1 this is realtime and the simulation will take two hours.
                     // tests should be sped up to save time.
                 // will accept any integer from 1 - 1000
-                outputStops:100,
+                outputStops:msg.deliveries,
                 // desired total number of deliveries for simulation
                 simulationDuration:7200
                 // simulation time in seconds
@@ -55,8 +63,12 @@ io.on('connection', function(socket){
                 var newStop = [stop.lat,stop.lng];
                 stopsArray.push(newStop);
                 io.emit('stops', stopsArray);
+                DA.assignDrivers(driversLocation,stopsArray,d1Queue,d2Queue,RSG);
             });
+
+
         });
+
 });
 
 

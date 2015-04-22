@@ -143,8 +143,13 @@ body {
 </div>
 
 <script>
-
-
+/*
+	var socket = io('http://localhost:1337');
+	socket.on('news', function (data) {
+		console.log(data);
+		socket.emit('my other event', { my: 'data' });
+	});
+	*/
 
 // Provide your access token
 //L.mapbox.accessToken = 'pk.eyJ1IjoiemFoaWQiLCJhIjoiYkE0WWYtYyJ9.Iumsoihb-jms7CXygDKKMg';
@@ -169,10 +174,10 @@ body {
 
 
 		function updateDrivers(drivers) {
-				var drivers = [
-												[41.899, -87.621],
-												[41.885, -87.628]
-											];
+
+				if (driversGroup) {
+					map.removeLayer(driversGroup);
+				}
 
 				var driversGroup = new L.LayerGroup().addTo(map);
 				//var marker = L.marker([userLatitude, userLongitude]).addTo(markers);
@@ -202,6 +207,14 @@ body {
 				console.log(msg);
 				updateDeliveries(msg);
 		});
+		socket.on('driver update', function(msg) {
+			updateDrivers(msg);
+			console.log(msg);
+			var message = msg;
+			socket.emit('next driver update',msg);
+
+
+		})
 
 
 
