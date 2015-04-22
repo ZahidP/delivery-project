@@ -78,22 +78,28 @@ module.exports = {
     // this should be prioritized delivery
     if (d1Queue.length) {
       var d1Delivery = d1Queue[0];
+      console.log('D1 Queue:')
+      console.log(d1Queue);
       var d1DeliveryObj = {"lat":d1Delivery[0], "lng":d1Delivery[1]};
 
-      nextStepLat = (d1Loc.lat-d1DeliveryObj.lat)/10;
+      nextStepLat = (d1DeliveryObj.lat-d1Loc.lat)/3;
       console.log('latitude step');
       console.log(nextStepLat);
-      nextStepLng = (d1Loc.lng-d1DeliveryObj.lng)/10;
+      nextStepLng = (d1DeliveryObj.lng-d1Loc.lng)/3;
+      var deltax = 0;
+      var deltay = 0;
 
-      d1Loc.lat = d1Loc.lat + nextStepLat;
-      d1Loc.lng = d1Loc.lng + nextStepLng;
+
+      d1Loc.lat = d1Loc.lat + nextStepLat + deltax;
+      d1Loc.lng = d1Loc.lng + nextStepLng + deltay;
 
       var d1Distance = RSG.distance(d1Loc,d1DeliveryObj);
 
       var d1L = [d1Loc.lat,d2Loc.lng];
 
-
-      if (d1Distance < .001) {
+      console.log('d1Distance');
+      console.log(d1Distance);
+      if (d1Distance < 1.5) {
         d1Queue.shift();
       }
 
@@ -101,17 +107,26 @@ module.exports = {
     }
     if (d2Queue.length) {
       var d2Delivery = d2Queue[0];
+      console.log('D2 Queue:')
+      console.log(d2Queue);
+
       var d2DeliveryObj = {"lat":d2Delivery[0], "lng":d2Delivery[1]};
 
-      nextStepLat = d2Loc.lat-d2DeliveryObj.lat;
-      nextStepLng = d2Loc.lng-d2DeliveryObj.lng
+      nextStepLat = (d2DeliveryObj.lat-d2Loc.lat)/3;
+      nextStepLng = (d2DeliveryObj.lng-d2Loc.lng)/3;
+
+
+      var deltax = 0;
+      var deltay = 0;
+
+
 
       d2Loc.lat = d2Loc.lat + nextStepLat;
       d2Loc.lng = d2Loc.lng + nextStepLng
 
       var d2Distance = RSG.distance(d1Loc,d2DeliveryObj);
-
-      if (d2Distance < .001) {
+      console.log(d2Distance);
+      if (d2Distance < 1.5) {
         d2Queue.shift();
       }
 
@@ -126,14 +141,25 @@ module.exports = {
 
     console.log('new d2 location');
     console.log(d2L);
+    console.log('end locations');
+    console.log(msg);
 
     if (d1L && d2L) {
     var driversLocation = [d1L,d2L];
     }
+    else if (d1L===undefined && d2L) {
+      console.log(msg[0]);
+      console.log(d2L);
+      console.log('d1L===undefined && d2L');
+      var driversLocation = [msg[0],d2L];
+    }
+    else if (d1L && d2L===undefined) {
+      console.log('d1L && d2L===undefined');
+      var driversLocation = [d1L,msg[1]];
+    }
     else {
       var driversLocation = msg;
     }
-    console.log(d1Queue);
     var driversInfo = [d1Queue,d2Queue,driversLocation];
     return driversInfo;
 
