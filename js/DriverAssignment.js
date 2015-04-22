@@ -81,12 +81,14 @@ module.exports = {
       var d1DeliveryObj = {"lat":d1Delivery[0], "lng":d1Delivery[1]};
 
       nextStepLat = (d1Loc.lat-d1DeliveryObj.lat)/10;
+      console.log('latitude step');
+      console.log(nextStepLat);
       nextStepLng = (d1Loc.lng-d1DeliveryObj.lng)/10;
 
       d1Loc.lat = d1Loc.lat + nextStepLat;
       d1Loc.lng = d1Loc.lng + nextStepLng;
 
-      var d1Distance = RSG.distance(d1Loc,recentObj);
+      var d1Distance = RSG.distance(d1Loc,d1DeliveryObj);
 
       var d1L = [d1Loc.lat,d2Loc.lng];
 
@@ -107,7 +109,7 @@ module.exports = {
       d2Loc.lat = d2Loc.lat + nextStepLat;
       d2Loc.lng = d2Loc.lng + nextStepLng
 
-      var d2Distance = RSG.distance(d1Loc,recentObj);
+      var d2Distance = RSG.distance(d1Loc,d2DeliveryObj);
 
       if (d2Distance < .001) {
         d2Queue.shift();
