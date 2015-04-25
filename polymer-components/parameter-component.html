@@ -79,6 +79,9 @@
         text-align: right;
         margin-top: 4em;
       }
+      .disabled {
+        color: hsla(0,0%,70%,1);
+      }
 
 
   	</style>
@@ -94,9 +97,9 @@
   					<button on-click='{{lessDeliveries}}'> Decrease </button>
       </div>
 				<div class="row">
-          <div class="col-md-3 input"> Drivers </div> <input value='{{drivers}}'>
-					<button on-click='{{moreDrivers}}'> Increase </button>
-					<button on-click='{{lessDrivers}}'> Decrease </button>
+          <div class="col-md-3 input"> Drivers </div> <input class="disabled" value='{{drivers}}' disabled>
+					<button on-click='{{moreDrivers}}' disabled> Increase </button>
+					<button on-click='{{lessDrivers}}' disabled> Decrease </button>
 				</div>
 				<div class="row">
           <div class="col-md-3 input"> Speed </div> <input value='{{speed}}'>

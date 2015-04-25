@@ -61,6 +61,10 @@ io.on('connection', function(socket){
                 // simulation time in seconds
             });
 
+            socket.on('stop map', function (msg) {
+              simulator.clearAll();
+            })
+
             simulator.on('newStop',function(stop){
                 // this is called every time a stop is generated
                 var newStop = [stop.lat,stop.lng];
@@ -82,7 +86,7 @@ io.on('connection', function(socket){
               io.emit('driver update', driversLocation);
 
 
-            }, 2000);
+            }, 1000);
 
 
 
