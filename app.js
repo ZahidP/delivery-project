@@ -29,15 +29,13 @@ io.on('connection', function(socket){
           driverQueues = [],
           d1CurrentRoute = [],
           d2CurrentRoute = [],
-          stopsArray = [];
-
+          stopsArray = [],
+          stopIndex = 0;
 
       var driversLocation = [
                       [41.899, -87.621],
                       [41.885, -87.628]
       ];
-
-
 
       socket.on('init map', function(msg) {
             //return require('./api/map').initMap(msg)
@@ -67,25 +65,26 @@ io.on('connection', function(socket){
 
             simulator.on('newStop',function(stop){
                 // this is called every time a stop is generated
-                var newStop = [stop.lat,stop.lng];
+                var newStop = [stop.lat,stop.lng,0,stopIndex];
+                stopIndex = stopIndex + 1;
                 stopsArray.push(newStop);
                 io.emit('stops', stopsArray);
                 driverQueues = DA.assignDrivers(driversLocation,stopsArray,d1Queue,d2Queue,RSG);
                 d1Queue = driverQueues[0];
                 d2Queue = driverQueues[1];
             });
-
               console.log('queueue');
               console.log(d1Queue);
               console.log(d2Queue);
             setInterval(function () {
-              driverInfo = DA.moveDrivers(driversLocation,d1Queue,d2Queue,RSG);
+              driverInfo = DA.moveDrivers(driversLocation,d1Queue,d2Queue,RSG,stopsArray,io);
               d1Queue = driverInfo[0];
               d2Queue = driverInfo[1];
               driversLocation = driverInfo[2];
+              console.log('stops array');
+              stopsArray = driverInfo[3];
+              console.log(stopsArray);
               io.emit('driver update', driversLocation);
-
-
             }, 1000);
 
 
