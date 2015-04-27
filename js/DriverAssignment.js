@@ -2,6 +2,7 @@
 EventEmitter = require('events').EventEmitter;
 
 
+
 /*
 d1Queue.prototype.__proto__ = EventEmitter.prototype;
 d2Queue.prototype.addStop = function(stop, stopCount, seconds) {
@@ -70,7 +71,7 @@ module.exports = {
 
   // @param: msg  --> drivers' current location
   // @param: d1Queue,d2Queue --> queue of driver deliveries
-  moveDrivers: function (msg,d1Queue,d2Queue,RSG,stopsArray) {
+  moveDrivers: function (msg,d1Queue,d2Queue,RSG,stopsArray,io) {
 
     var nextPositions = [];
     var d1Loc = {"lat":msg[0][0], "lng":msg[0][1]};
@@ -94,6 +95,7 @@ module.exports = {
         for( var i = 0; i < stopsArray.length; i++ ) {
           if( stopsArray[i][3] ===  d1Queue[0][3]) {
             stopsArray[i][2] = 1;   // this stop has been served
+            io.emit('stops', stopsArray);
             break;
             }
           }
@@ -122,6 +124,7 @@ module.exports = {
         for( var i = 0; i < stopsArray.length; i++ ) {
           if( stopsArray[i][3] ===  d2Queue[0][3]) {
             stopsArray[i][2] = 1;   // this stop has been served
+            io.emit('stops', stopsArray);
             break;
             }
         }

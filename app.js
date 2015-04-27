@@ -77,7 +77,7 @@ io.on('connection', function(socket){
               console.log(d1Queue);
               console.log(d2Queue);
             setInterval(function () {
-              driverInfo = DA.moveDrivers(driversLocation,d1Queue,d2Queue,RSG,stopsArray);
+              driverInfo = DA.moveDrivers(driversLocation,d1Queue,d2Queue,RSG,stopsArray,io);
               d1Queue = driverInfo[0];
               d2Queue = driverInfo[1];
               driversLocation = driverInfo[2];
