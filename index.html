@@ -192,17 +192,23 @@ body {
 				}
 		}
 
+		var deliveriesGroup = new L.LayerGroup().addTo(map);
+
+
 		function updateDeliveries(deliveries) {
 
 				if (deliveriesGroup) {
 					map.removeLayer(deliveriesGroup);
 				}
-				var deliveriesGroup = new L.LayerGroup().addTo(map);
+				deliveriesGroup = new L.LayerGroup().addTo(map);
 					//var marker = L.marker([userLatitude, userLongitude]).addTo(markers);
 					for (var i = 0; i < deliveries.length; i++) {
-						var marker = new L.circle(deliveries[i],50,{fillColor: 'red',color:"red"}).addTo(deliveriesGroup);
-							//.bindPopup(drivers[i][0])
-							//.addTo(map);
+						if (deliveries[i][2]===0) {
+							var marker = new L.circle(deliveries[i],50,{fillColor: 'red',color:"red"}).addTo(deliveriesGroup);
+						}
+						else if (deliveries[i][2]===1) {
+							var marker = new L.circle(deliveries[i],20,{fillColor: 'green',color:"green"}).addTo(deliveriesGroup);
+						}
 					}
 			}
 

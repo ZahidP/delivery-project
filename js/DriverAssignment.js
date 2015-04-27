@@ -18,7 +18,7 @@ module.exports = {
   // @param:msg --> drivers' current locations
   // process new deliveries
   // assign them to drivers' queues
-  assignDrivers: function(msg,stopsArray,d1Queue,d2Queue,RSG){
+  assignDrivers: function(msg,stopsArray,d1Queue,d2Queue,RSG,stops){
 
     console.log('next update');
     console.log(msg);
@@ -70,7 +70,7 @@ module.exports = {
 
   // @param: msg  --> drivers' current location
   // @param: d1Queue,d2Queue --> queue of driver deliveries
-  moveDrivers: function (msg,d1Queue,d2Queue,RSG) {
+  moveDrivers: function (msg,d1Queue,d2Queue,RSG,stopsArray) {
 
     var nextPositions = [];
     var d1Loc = {"lat":msg[0][0], "lng":msg[0][1]};
@@ -89,12 +89,19 @@ module.exports = {
       d1Loc.lat = d1Loc.lat + stepSize * signLat1;
       d1Loc.lng = d1Loc.lng + stepSize * signLng1;
       var d1Distance = RSG.distance(d1Loc,d1DeliveryObj);
-      console.log('d1Distance');
-      console.log(d1Distance);
+
       if (d1Distance < 0.1) {
+        for( var i = 0; i < stopsArray.length; i++ ) {
+          if( stopsArray[i][3] ===  d1Queue[0][3]) {
+            stopsArray[i][2] = 1;   // this stop has been served
+            break;
+            }
+          }
         d1Queue.shift();
         console.log('queue 1 shifted');
         console.log(d1Queue);
+        console.log('stops arr');
+        console.log(stopsArray);
       }
       var d1L = [d1Loc.lat,d1Loc.lng];
     }
@@ -112,6 +119,12 @@ module.exports = {
       console.log('d2Distance');
       console.log(d2Distance);
       if (d2Distance < 0.1) {
+        for( var i = 0; i < stopsArray.length; i++ ) {
+          if( stopsArray[i][3] ===  d2Queue[0][3]) {
+            stopsArray[i][2] = 1;   // this stop has been served
+            break;
+            }
+        }
         d2Queue.shift();
         console.log('queue 2 shifted');
         console.log(d2Queue);
@@ -137,7 +150,7 @@ module.exports = {
     else {
       var driversLocation = msg;
     }
-    var driversInfo = [d1Queue,d2Queue,driversLocation];
+    var driversInfo = [d1Queue,d2Queue,driversLocation,stopsArray];
     return driversInfo;
 
 
