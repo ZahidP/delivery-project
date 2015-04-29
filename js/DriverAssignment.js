@@ -87,6 +87,12 @@ module.exports = {
           deltaLng = (d1DeliveryObj.lng-d1Loc.lng),
           signLat1 = deltaLat?deltaLat<0?-1:1:0,
           signLng1 = deltaLng?deltaLng<0?-1:1:0;
+      if (Math.abs(deltaLat) < .0005) {
+        signLat1 = 0;
+      }
+      if (Math.abs(deltaLng) < .0005) {
+        signLng1 = 0;
+      }
       d1Loc.lat = d1Loc.lat + stepSize * signLat1;
       d1Loc.lng = d1Loc.lng + stepSize * signLng1;
       var d1Distance = RSG.distance(d1Loc,d1DeliveryObj);
@@ -115,6 +121,12 @@ module.exports = {
           deltaLng2 = (d2DeliveryObj.lng-d2Loc.lng),
           signLat2 = deltaLat2 ? deltaLat2 <0?-1:1:0,
           signLng2 = deltaLng2 ? deltaLng2 <0?-1:1:0;
+      if (Math.abs(deltaLat2) < .0005) {
+        signLat2 = 0;
+      }
+      if (Math.abs(deltaLng2) < .0005) {
+        signLng2 = 0;
+      }
       d2Loc.lat = d2Loc.lat + stepSize * signLat2;
       d2Loc.lng = d2Loc.lng + stepSize * signLng2;
       var d2Distance = RSG.distance(d2Loc,d2DeliveryObj);

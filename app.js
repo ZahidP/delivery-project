@@ -85,7 +85,7 @@ io.on('connection', function(socket){
               stopsArray = driverInfo[3];
               console.log(stopsArray);
               io.emit('driver update', driversLocation);
-            }, 1000);
+            }, 250);
 
 
 
