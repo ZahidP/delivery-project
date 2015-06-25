@@ -6,6 +6,9 @@
 2. `bower install`
 3. `node app.js`
 
+![image](https://cloud.githubusercontent.com/assets/8601964/8363411/5a3b4e94-1b44-11e5-8a6b-3fa9196005d9.png)
+
+
 ## Summary
 <hr>
 ### Deliveries
